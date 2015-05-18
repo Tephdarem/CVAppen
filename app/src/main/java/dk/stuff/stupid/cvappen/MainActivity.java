@@ -1,22 +1,21 @@
 package dk.stuff.stupid.cvappen;
 
-import java.util.Locale;
-
 import android.app.Activity;
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.support.v13.app.FragmentPagerAdapter;
 import android.os.Bundle;
+import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TabHost;
 import android.widget.TextView;
+
+import java.util.Locale;
 
 
 public class MainActivity extends Activity {
@@ -34,12 +33,12 @@ public class MainActivity extends Activity {
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    ViewPager mViewPager;
+    //ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.fragment_main);
 
 
         // Create the adapter that will return a fragment for each of the three
@@ -47,8 +46,25 @@ public class MainActivity extends Activity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        //mViewPager = (ViewPager) findViewById(R.id.pager);
+        //mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        TabHost tabs = (TabHost) findViewById(R.id.tabHost);
+        tabs.setup();
+
+        TabHost.TabSpec tab1 = tabs.newTabSpec("Tab 1");
+        tab1.setContent(R.id.tab1);
+        tab1.setIndicator("Tab 1");
+        tabs.addTab(tab1);
+
+        TabHost.TabSpec tab2 = tabs.newTabSpec("Tab 2");
+        tab2.setContent(R.id.tab2);
+        tab2.setIndicator("Tab 2");
+        tabs.addTab(tab2);
+//
+//        TabHost.TabSpec tab3 = tabs.newTabSpec("faq");
+//        tab3.setContent(R.id.tab3);
+//        tabs.addTab(tab3);
 
     }
 
@@ -75,6 +91,56 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * A placeholder fragment containing a simple view.
+     */
+    public static class PlaceholderFragment extends Fragment implements View.OnClickListener {
+        /**
+         * The fragment argument representing the section number for this
+         * fragment.
+         */
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        View rootView;
+        int counter = 0;
+
+        public PlaceholderFragment() {
+        }
+
+        /**
+         * Returns a new instance of this fragment for the given section
+         * number.
+         */
+        public static PlaceholderFragment newInstance(int sectionNumber) {
+            PlaceholderFragment fragment = new PlaceholderFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            rootView.setVisibility(View.VISIBLE);
+            //set click listener for tab1button
+            Button clickButton = (Button) rootView.findViewById(R.id.tab1Button);
+            clickButton.setOnClickListener(this);
+
+            return rootView;
+        }
+
+        @Override
+        public void onClick(View v) {
+
+            switch (v.getId()) {
+                case R.id.tab1Button:
+                    ((TextView) rootView.findViewById(R.id.tab1Label)).setText("Clicks:" + ++counter);
+                    break;
+            }
+        }
+    }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -111,39 +177,6 @@ public class MainActivity extends Activity {
                     return getString(R.string.title_section3).toUpperCase(l);
             }
             return null;
-        }
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
         }
     }
 
